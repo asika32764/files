@@ -1,0 +1,210 @@
+<html>
+<head>
+<!-- Imports Open CTI JavaScript library. It should point to a valid Salesforce
+domain. -->
+<script src="https://domain:port/support/api/25.0/interaction.js"></script>
+<script type="text/javascript">
+
+var ws 
+// Invokes API method: isInConsole
+function connect() {
+	// Write your code in the same way as for native WebSocket:
+  ws = new WebSocket('wss://localhost:10001')
+  ws.onopen = function() {
+    console.log('open')
+    
+  }
+  
+  ws.onmessage = function(e) {
+    // Receives a message.
+    console.log('message' , e.data)
+  }
+  
+  ws.onclose = function() {
+    console.log('close')
+  }
+  
+	ws.onerror = function(error) {
+	  console.log(error)
+	}
+  
+}
+
+ function connect_IP() {
+	// Write your code in the same way as for native WebSocket:
+ var IPAddr = document.getElementById("IPAddr").value;
+ console.log(' IPAddress='+IPAddr);
+ 
+  ws = new WebSocket('wss://'+IPAddr+':8099')
+  ws.onopen = function() {
+    console.log('open')
+    
+  }
+  
+  ws.onmessage = function(e) {
+    // Receives a message.
+    console.log('message' , e.data)
+  }
+  
+  ws.onclose = function() {
+    console.log('close')
+  }
+  
+	ws.onerror = function(error) {
+	  console.log(error)
+	}
+  
+}
+
+<!-- // Callback of API method: getCallCenterSettings -->
+<!-- var connectCB = function (response) { -->
+	<!-- // Result returns call center settings as a JSON string. -->
+	<!-- if (response.result) { -->
+		<!-- alert(response.result); -->
+	<!-- } else { -->
+		<!-- alert('Error retrieving call center settings ' + response.error); -->
+	<!-- } -->
+<!-- }; -->
+
+
+
+function send() {
+	ws.send('Hello')  // Sends a message.
+}
+
+function close1() {
+ console.log(' to close');
+	//if (ws)
+		ws.close();
+}
+
+function Login() {
+ console.log(' to Login');
+ let LoginPara = document.getElementById("LoginPara").value;
+ if (LoginPara == ""){LoginPara = '201,1111,IN'}
+ console.log(' LOGIN=LOGIN,'+LoginPara);
+	//if (ws)
+		ws.send('LOGIN,'+LoginPara);
+}
+
+function Logout() {
+ console.log(' to Logout');
+	//if (ws)
+		ws.send('LOGOUT');
+}
+
+function TRF_IVR() {
+ console.log(' to Transfer IVR');
+ let IVRPara = document.getElementById("IVRPara").value;
+ console.log(' TRFIVR=TRFIVR,'+IVRPara);
+	//if (ws)
+		ws.send('TRFIVR,'+IVRPara);
+}
+
+function DialA() {
+ console.log(' to DialA');
+ let PhoneNoA = document.getElementById("PhoneNoA").value;
+ console.log(' PhoneNoA='+PhoneNoA);
+	//if (ws)
+		ws.send('DIALA,'+PhoneNoA);
+}
+
+function Dial() {
+ console.log(' to Dial');
+ let PhoneNo = document.getElementById("PhoneNo").value;
+ console.log(' PhoneNo='+PhoneNo);
+	//if (ws)
+		ws.send('DIAL,'+PhoneNo);
+}
+
+function Pickup() {
+ console.log(' to Pickup');
+	//if (ws)
+		ws.send('EXTENSIONPICKUP');
+}
+
+function Hangup() {
+ console.log(' to Hangup');
+	//if (ws)
+		ws.send('HANGUP');
+}
+
+function Start() {
+ console.log(' to Start');
+ let StartID = document.getElementById("StartID").value;
+ let sXML = '<?xml version="1.0" encoding="Big5"?><AdminRequest><Type>8</Type><CampaignId>'+StartID+'</CampaignId></AdminRequest>';
+ console.log(sXML);
+ //let encoder = new TextEncoder();
+ //let encodedXML = encoder.encode(sXML);
+ //console.log(encodedXML)
+	//if (ws)
+		ws.send(sXML);
+}
+
+function Stop() {
+ console.log(' to Stop');
+ let StopID = document.getElementById("StopID").value;
+ let sXML = '<?xml version="1.0" encoding="Big5"?><AdminRequest><Type>7</Type><CampaignId>'+StopID+'</CampaignId></AdminRequest>';
+ console.log(sXML);
+ //let encoder = new TextEncoder();
+ //let encodedXML = encoder.encode(sXML);
+ //console.log(encodedXML)
+	//if (ws)
+		ws.send(sXML);
+}
+
+function GetSTS() {
+ console.log(' to Get Statistics');
+ let GetSTS = document.getElementById("GetSTS").value;
+ let sXML = '<?xml version="1.0" encoding="Big5"?><AdminRequest><Type>15</Type><CampaignId>'+GetSTS+'</CampaignId></AdminRequest>';
+ console.log(sXML);
+ //let encoder = new TextEncoder();
+ //let encodedXML = encoder.encode(sXML);
+ //console.log(encodedXML)
+	//if (ws)
+		ws.send(sXML);
+}
+
+function CleanUp() {
+ console.log(' to Clean Up');
+ let CleanUp = document.getElementById("CleanUp").value;
+ let sXML = '<?xml version="1.0" encoding="Big5"?><AdminRequest><Type>31</Type><CampaignId>'+CleanUp+'</CampaignId></AdminRequest>';
+ console.log(sXML);
+ //let encoder = new TextEncoder();
+ //let encodedXML = encoder.encode(sXML);
+ //console.log(encodedXML)
+	//if (ws)
+		ws.send(sXML);
+}
+
+</script>
+
+</head>
+<body>
+<table border="1">
+	<th bgcolor="#C7EDCC">AgentConsole</th></tr>
+	<td>
+		<button onclick="connect();">connect to Localhost</button></br>
+		<button onclick="send();">send</button></br>
+		<button onclick="close1();">close</button></br>
+		<button onclick="Login();">Login</button><input id="LoginPara" type="text" size="20" value="">ex:ID,PW,BOTH</input><font color="BLUE">(default is 201,1111,IN if empty)</font></br>
+		<button onclick="Logout();">Logout</button></br>
+		<button onclick="TRF_IVR();">TRFIVR</button><input id="IVRPara" type="text" size="20" value="APPROVE_IVR,201"> </input></br>
+		<button onclick="DialA();">DialA</button><input id="PhoneNoA" type="text" size="20"> </input></br>
+		<button onclick="Dial();">Dial</button><input id="PhoneNo" type="text" size="20"> </input></br>
+		<button onclick="Pickup();">Pickup</button>
+		<button onclick="Hangup();">Hangup</button>
+	</td>
+</table>
+<table border="1">
+	<th bgcolor="#C7EDCC">Campaign</th></tr>
+	<td>
+		<button onclick="connect_IP();">connect to IP</button><input id="IPAddr" type="text" size="20"> </input></br>
+		<button onclick="Start();">Start campaignID</button><input id="StartID" type="text" size="20"></input></br>
+		<button onclick="Stop();">Stop campaignID</button><input id="StopID" type="text" size="20"></input></br>
+		<button onclick="GetSTS();">Get Statistics</button><input id="GetSTS" type="text" size="20"></input></br>
+		<button onclick="CleanUp();">Clean Up</button><input id="CleanUp" type="text" size="20"></input></br>
+	</td>
+</table>
+</body>
+</html> 
